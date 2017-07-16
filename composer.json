@@ -1,0 +1,13 @@
+{
+    "name": "gplcart/backup",
+    "type": "gplcart-module",
+    "description": "Backup API",
+    "keywords": ["gplcart", "ecommerce", "shopping cart", "gplcart module", "php"],
+    "license": "GPL-3.0+",
+    "require": {
+        "gplcart/composer-module-installer": "*",
+        "ext-zip": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
