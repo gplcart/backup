@@ -152,12 +152,11 @@ class Backup extends Model
             return false;
         }
 
-        if (!$this->deleteZip($id)) {
-            return false;
-        }
+        $result = (bool) $this->db->delete('backup', array('backup_id' => $id));
 
-        $conditions = array('backup_id' => $id);
-        $result = $this->db->delete('backup', $conditions);
+        if ($result) {
+            $this->deleteZip($id);
+        }
 
         $this->hook->fire('module.backup.delete.after', $id, $result, $this);
         return (bool) $result;
@@ -171,7 +170,12 @@ class Backup extends Model
     protected function deleteZip($backup_id)
     {
         $backup = $this->get($backup_id);
-        return unlink(GC_FILE_DIR . "/{$backup['path']}");
+
+        if (isset($backup['path']) && file_exists(GC_FILE_DIR . "/{$backup['path']}")) {
+            return unlink(GC_FILE_DIR . "/{$backup['path']}");
+        }
+
+        return false;
     }
 
     /**
