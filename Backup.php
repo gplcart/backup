@@ -32,19 +32,21 @@ class Backup extends Module
      */
     public function hookModuleInstallBefore(&$result)
     {
+        $language = $this->getLanguage();
+
         if (!class_exists('ZipArchive')) {
-            $result = 'Class ZipArchive does not exist';
+            $result = $language->text('Class ZipArchive does not exist');
             return null;
         }
 
         if ($this->db->tableExists('backup')) {
-            $result = 'Table "backup" already exists';
+            $result = $language->text('Table "backup" already exists');
             return null;
         }
 
         if (!$this->db->import($this->getDbScheme())) {
             $this->db->deleteTable('backup');
-            $result = 'An error occurred while importing database tables';
+            $result = $language->text('An error occurred while importing database tables');
         }
     }
 
