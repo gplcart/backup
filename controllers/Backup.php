@@ -123,7 +123,7 @@ class Backup extends BackendController
      */
     protected function setBreadcrumbListBackup()
     {
-        $this->setBreadcrumbBackend();
+        $this->setBreadcrumbHome();
     }
 
     /**
