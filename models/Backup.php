@@ -9,8 +9,7 @@
 
 namespace gplcart\modules\backup\models;
 
-use gplcart\core\Cache,
-    gplcart\core\Model,
+use gplcart\core\Model,
     gplcart\core\Handler;
 use gplcart\core\models\User as UserModel,
     gplcart\core\models\Language as LanguageModel;
@@ -208,7 +207,7 @@ class Backup extends Model
      */
     public function getHandlers()
     {
-        $handlers = &Cache::memory(__METHOD__);
+        $handlers = &gplcart_static(__METHOD__);
 
         if (isset($handlers)) {
             return $handlers;
