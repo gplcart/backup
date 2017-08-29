@@ -32,21 +32,15 @@ class Backup extends Module
      */
     public function hookModuleInstallBefore(&$result)
     {
-        $language = $this->getLanguage();
-
         if (!class_exists('ZipArchive')) {
-            $result = $language->text('Class ZipArchive does not exist');
+            $result = $this->getLanguage()->text('Class ZipArchive does not exist');
             return null;
         }
 
-        if ($this->db->tableExists('backup')) {
-            $result = $language->text('Table "backup" already exists');
-            return null;
-        }
+        $result_db = $this->installDbTable('backup', $this->getDbScheme());
 
-        if (!$this->db->import($this->getDbScheme())) {
-            $this->db->deleteTable('backup');
-            $result = $language->text('An error occurred while importing database tables');
+        if ($result_db !== true) {
+            $result = $result_db;
         }
     }
 
@@ -85,6 +79,57 @@ class Backup extends Module
     }
 
     /**
+     * Performs backup operation
+     * @param string $handler_id
+     * @param array $data
+     * @return boolean|string
+     */
+    public function backup($handler_id, array $data)
+    {
+        return $this->getModelBackup()->backup($handler_id, $data);
+    }
+
+    /**
+     * Performs restore operation
+     * @param string $handler_id
+     * @param array $data
+     * @return boolean|string
+     */
+    public function restore($handler_id, array $data)
+    {
+        return $this->getModelBackup()->restore($handler_id, $data);
+    }
+
+    /**
+     * Returns an array of defined handlers
+     * @return array
+     */
+    public function getHandlers()
+    {
+        return $this->getModelBackup()->getHandlers();
+    }
+
+    /**
+     * Whether a backup already exists
+     * @param string $id
+     * @param null|string $version
+     * @return bool
+     */
+    public function exists($id, $version = null)
+    {
+        return $this->getModelBackup()->exists($id, $version);
+    }
+
+    /**
+     * Returns backup model
+     * @return \gplcart\modules\backup\models\Backup
+     */
+    protected function getModelBackup()
+    {
+        return $this->getModel('Backup', 'backup');
+    }
+
+    /**
      * Returns an array of database scheme
      * @return array
      */
@@ -100,7 +145,7 @@ class Backup extends Module
                     'path' => array('type' => 'varchar', 'length' => 255, 'not_null' => true),
                     'user_id' => array('type' => 'int', 'length' => 10, 'not_null' => true, 'default' => 0),
                     'version' => array('type' => 'varchar', 'length' => 50, 'not_null' => true, 'default' => ''),
-                    'module_id' => array('type' => 'varchar', 'length' => 50, 'not_null' => true, 'default' => '')
+                    'id' => array('type' => 'varchar', 'length' => 50, 'not_null' => true, 'default' => '')
                 )
             )
         );
