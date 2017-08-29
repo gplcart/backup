@@ -32,7 +32,7 @@
         <th><a href="<?php echo $sort_name; ?>"><?php echo $this->text('Name'); ?> <i class="fa fa-sort"></i></a></th>
         <th><a href="<?php echo $sort_type; ?>"><?php echo $this->text('Type'); ?> <i class="fa fa-sort"></i></a></th>
         <th><a href="<?php echo $sort_version; ?>"><?php echo $this->text('Version'); ?> <i class="fa fa-sort"></i></a></th>
-        <th><a href="<?php echo $sort_module_id; ?>"><?php echo $this->text('Module ID'); ?> <i class="fa fa-sort"></i></a></th>
+        <th><a href="<?php echo $sort_id; ?>"><?php echo $this->text('ID'); ?> <i class="fa fa-sort"></i></a></th>
         <th><a href="<?php echo $sort_user_id; ?>"><?php echo $this->text('User'); ?> <i class="fa fa-sort"></i></a></th>
         <th><a href="<?php echo $sort_created; ?>"><?php echo $this->text('Created'); ?> <i class="fa fa-sort"></i></a></th>
         <th></th>
@@ -61,10 +61,10 @@
           <?php } ?>
         </td>
         <td class="middle">
-          <?php if (empty($backup['module_id'])) { ?>
+          <?php if (empty($backup['id'])) { ?>
           <span class="text-danger"><?php echo $this->text('None'); ?></span>
           <?php } else { ?>
-          <?php echo $this->e($backup['module_id']); ?>
+          <?php echo $this->e($backup['id']); ?>
           <?php } ?>
         </td>
         <td class="middle">

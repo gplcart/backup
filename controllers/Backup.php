@@ -60,7 +60,7 @@ class Backup extends BackendController
     protected function setFilterListBackup()
     {
         $allowed = array('created', 'name', 'user_id', 'type',
-            'version', 'module_id', 'backup_id');
+            'version', 'id', 'backup_id');
 
         $this->setFilter($allowed);
     }
@@ -70,7 +70,7 @@ class Backup extends BackendController
      */
     protected function downloadListBackup()
     {
-        $backup_id = $this->getQuery('download', '', 'string');
+        $backup_id = $this->getQuery('download', '');
 
         if (empty($backup_id)) {
             return null;

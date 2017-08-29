@@ -49,15 +49,13 @@ class Module
     public function backup(array $data, $model)
     {
         $data['type'] = 'module';
-
-        $vars = array('@name' => $data['name'], '@date' => date("D M j G:i:s"));
-        $data['name'] = $this->language->text('Module @name. Saved @date', $vars);
+        $data['name'] = $this->language->text('Module @name', array('@name' => $data['name']));
 
         $time = date('d-m-Y--G-i');
-        $path = GC_PRIVATE_BACKUP_DIR . "/module_{$data['module_id']}_{$time}.zip";
+        $path = GC_PRIVATE_BACKUP_DIR . "/module_{$data['id']}_{$time}.zip";
         $destination = gplcart_file_unique($path);
 
-        $success = $this->zip->folder($data['directory'], $destination, $data['module_id']);
+        $success = $this->zip->folder($data['directory'], $destination, $data['id']);
 
         if ($success) {
             $data['path'] = gplcart_file_relative_path($destination);

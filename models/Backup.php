@@ -68,9 +68,14 @@ class Backup extends Model
             $where[] = $data['user_id'];
         }
 
-        if (isset($data['module_id'])) {
-            $sql .= ' AND b.module_id = ?';
-            $where[] = $data['module_id'];
+        if (isset($data['id'])) {
+            $sql .= ' AND b.id = ?';
+            $where[] = $data['id'];
+        }
+
+        if (isset($data['version'])) {
+            $sql .= ' AND b.version = ?';
+            $where[] = $data['version'];
         }
 
         if (isset($data['name'])) {
@@ -80,7 +85,7 @@ class Backup extends Model
 
         $allowed_order = array('asc', 'desc');
         $allowed_sort = array('name', 'user_id', 'version',
-            'module_id', 'backup_id', 'type', 'created');
+            'id', 'backup_id', 'type', 'created');
 
         if (isset($data['sort']) && in_array($data['sort'], $allowed_sort)//
                 && isset($data['order']) && in_array($data['order'], $allowed_order)
@@ -110,10 +115,11 @@ class Backup extends Model
      */
     public function add(array $data)
     {
-        $this->hook->attach('module.backup.add.before', $data, $this);
+        $result = null;
+        $this->hook->attach('module.backup.add.before', $data, $result, $this);
 
-        if (empty($data)) {
-            return false;
+        if (isset($result)) {
+            return $result;
         }
 
         if (empty($data['user_id'])) {
@@ -121,10 +127,10 @@ class Backup extends Model
         }
 
         $data['created'] = GC_TIME;
-        $data['backup_id'] = $this->db->insert('backup', $data);
+        $result = $this->db->insert('backup', $data);
 
-        $this->hook->attach('module.backup.add.after', $data, $this);
-        return $data['backup_id'];
+        $this->hook->attach('module.backup.add.after', $data, $result, $this);
+        return $result;
     }
 
     /**
@@ -145,10 +151,11 @@ class Backup extends Model
      */
     public function delete($id)
     {
+        $result = null;
         $this->hook->attach('module.backup.delete.before', $id, $this);
 
-        if (empty($id)) {
-            return false;
+        if (isset($result)) {
+            return $result;
         }
 
         $result = (bool) $this->db->delete('backup', array('backup_id' => $id));
@@ -199,6 +206,18 @@ class Backup extends Model
     {
         $handlers = $this->getHandlers();
         return Handler::call($handlers, $handler_id, 'restore', array($data, $this));
+    }
+
+    /**
+     * Whether a backup already exists
+     * @param string $id
+     * @param null|string $version
+     * @return bool
+     */
+    public function exists($id, $version = null)
+    {
+        $list = $this->getList(array('id' => $id, 'version' => $version));
+        return !empty($list);
     }
 
     /**
