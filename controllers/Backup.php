@@ -81,7 +81,7 @@ class Backup extends BackendController
         $backup = $this->backup->get($backup_id);
 
         if (!empty($backup['path'])) {
-            $this->download(GC_FILE_DIR . "/{$backup['path']}");
+            $this->download(gplcart_file_absolute_path($backup['path']));
         }
     }
 

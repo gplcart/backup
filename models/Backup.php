@@ -122,6 +122,15 @@ class Backup extends Model
             return $result;
         }
 
+        $version = null;
+        if (isset($data['version'])) {
+            $version = $data['version'];
+        }
+
+        if ($this->exists($data['id'], $version)) {
+            return false;
+        }
+
         if (empty($data['user_id'])) {
             $data['user_id'] = $this->user->getId();
         }
@@ -158,10 +167,10 @@ class Backup extends Model
             return $result;
         }
 
-        $result = (bool) $this->db->delete('backup', array('backup_id' => $id));
+        $result = $this->deleteZip($id);
 
         if ($result) {
-            $this->deleteZip($id);
+            $this->db->delete('backup', array('backup_id' => $id));
         }
 
         $this->hook->attach('module.backup.delete.after', $id, $result, $this);
@@ -177,11 +186,12 @@ class Backup extends Model
     {
         $backup = $this->get($backup_id);
 
-        if (isset($backup['path']) && file_exists(GC_FILE_DIR . "/{$backup['path']}")) {
-            return unlink(GC_FILE_DIR . "/{$backup['path']}");
+        if (empty($backup['path'])) {
+            return false;
         }
 
-        return false;
+        $file = gplcart_file_absolute_path($backup['path']);
+        return file_exists($file) && unlink($file);
     }
 
     /**
