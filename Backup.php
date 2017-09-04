@@ -29,18 +29,19 @@ class Backup extends Module
 
     /**
      * Implements hook "module.install.before"
+     * @param null|string $result
      */
     public function hookModuleInstallBefore(&$result)
     {
         if (!class_exists('ZipArchive')) {
             $result = $this->getLanguage()->text('Class ZipArchive does not exist');
-            return null;
-        }
+        } else {
 
-        $result_db = $this->installDbTable('backup', $this->getDbScheme());
+            $result_db = $this->installDbTable('backup', $this->getDbScheme());
 
-        if ($result_db !== true) {
-            $result = $result_db;
+            if ($result_db !== true) {
+                $result = $result_db;
+            }
         }
     }
 
