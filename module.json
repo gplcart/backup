@@ -1,7 +1,7 @@
 {
     "name": "Backup",
     "version": "1.0.0-dev",
-    "description": "Backup API",
+    "description": "Provides UI and API to back up and restore different entities",
     "author": "Iurii Makukh <gplcart.software@gmail.com>",
     "core": "1.x",
     "license": "GPL-3.0+"

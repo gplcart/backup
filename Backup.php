@@ -59,9 +59,9 @@ class Backup extends Module
      */
     public function hookUserRolePermissions(array &$permissions)
     {
-        $permissions['backup'] = 'Backup: access';
-        $permissions['backup_delete'] = 'Backup: delete';
-        $permissions['backup_download'] = 'Backup: download';
+        $permissions['backup'] = /* @text */'Backup: access';
+        $permissions['backup_delete'] = /* @text */'Backup: delete';
+        $permissions['backup_download'] = /* @text */'Backup: download';
     }
 
     /**
@@ -72,7 +72,7 @@ class Backup extends Module
     {
         $routes['admin/report/backup'] = array(
             'access' => 'backup',
-            'menu' => array('admin' => 'Backups'),
+            'menu' => array('admin' => /* @text */'Backups'),
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\backup\\controllers\\Backup', 'listBackup')
             )
