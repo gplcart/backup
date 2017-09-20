@@ -10,7 +10,7 @@
 <?php if ($this->access('backup_delete')) { ?>
 <div class="form-inline actions">
   <div class="input-group">
-    <select name="action[name]" class="form-control" onchange="GplCart.action(this);">
+    <select name="action[name]" class="form-control" onchange="Gplcart.action(this);">
       <option value=""><?php echo $this->text('With selected'); ?></option>
       <option value="delete" data-confirm="<?php echo $this->text('Are you sure? It cannot be undone!'); ?>">
         <?php echo $this->text('Delete'); ?>
@@ -26,7 +26,7 @@
   <table class="table backups">
     <thead>
       <tr>
-        <th><input type="checkbox" onchange="GplCart.selectAll(this);"></th>
+        <th><input type="checkbox" onchange="Gplcart.selectAll(this);"></th>
         <th><a href="<?php echo $sort_backup_id; ?>"><?php echo $this->text('ID'); ?> <i class="fa fa-sort"></i></a></th>
         <th><a href="<?php echo $sort_name; ?>"><?php echo $this->text('Name'); ?> <i class="fa fa-sort"></i></a></th>
         <th><a href="<?php echo $sort_type; ?>"><?php echo $this->text('Type'); ?> <i class="fa fa-sort"></i></a></th>
