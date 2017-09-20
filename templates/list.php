@@ -8,18 +8,17 @@
 ?>
 <?php if (!empty($backups)) { ?>
 <?php if ($this->access('backup_delete')) { ?>
-<div class="btn-toolbar actions">
-  <div class="btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-      <?php echo $this->text('With selected'); ?> <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-      <li>
-        <a data-action="delete" data-action-confirm="<?php echo $this->text('Are you sure? It cannot be undone!'); ?>" href="#">
-          <?php echo $this->text('Delete'); ?>
-        </a>
-      </li>
-    </ul>
+<div class="form-inline actions">
+  <div class="input-group">
+    <select name="action[name]" class="form-control" onchange="GplCart.action(this);">
+      <option value=""><?php echo $this->text('With selected'); ?></option>
+      <option value="delete" data-confirm="<?php echo $this->text('Are you sure? It cannot be undone!'); ?>">
+        <?php echo $this->text('Delete'); ?>
+      </option>
+    </select>
+    <span class="input-group-btn hidden-js">
+      <button class="btn btn-default" name="action[submit]" value="1"><?php echo $this->text('OK'); ?></button>
+    </span>
   </div>
 </div>
 <?php } ?>
@@ -27,7 +26,7 @@
   <table class="table backups">
     <thead>
       <tr>
-        <th><input type="checkbox" id="select-all" value="1"></th>
+        <th><input type="checkbox" onchange="GplCart.selectAll(this);"></th>
         <th><a href="<?php echo $sort_backup_id; ?>"><?php echo $this->text('ID'); ?> <i class="fa fa-sort"></i></a></th>
         <th><a href="<?php echo $sort_name; ?>"><?php echo $this->text('Name'); ?> <i class="fa fa-sort"></i></a></th>
         <th><a href="<?php echo $sort_type; ?>"><?php echo $this->text('Type'); ?> <i class="fa fa-sort"></i></a></th>
@@ -42,7 +41,7 @@
       <?php foreach ($backups as $id => $backup) { ?>
       <tr>
         <td class="middle">
-          <input type="checkbox" class="select-all" name="selected[]" value="<?php echo $id; ?>">
+          <input type="checkbox" class="select-all" name="action[items][]" value="<?php echo $id; ?>">
         </td>
         <td class="middle"><?php echo $this->e($id); ?></td>
         <td class="middle"><?php echo $this->e($backup['name']); ?></td>

@@ -90,12 +90,7 @@ class Backup extends BackendController
      */
     protected function actionListBackup()
     {
-        $action = $this->getPosted('action', '', true, 'string');
-        $selected = $this->getPosted('selected', array(), true, 'array');
-
-        if (empty($action)) {
-            return null;
-        }
+        list($selected, $action) = $this->getPostedAction();
 
         $deleted = 0;
         foreach ($selected as $id) {
@@ -105,8 +100,8 @@ class Backup extends BackendController
         }
 
         if ($deleted > 0) {
-            $message = $this->text('Deleted %num items', array('%num' => $deleted));
-            $this->setMessage($message, 'success', true);
+            $message = $this->text('Deleted %num item(s)', array('%num' => $deleted));
+            $this->setMessage($message, 'success');
         }
     }
 
