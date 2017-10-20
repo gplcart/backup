@@ -48,7 +48,7 @@ class Module
      */
     public function backup(array $data, $model)
     {
-        $directory = GC_PRIVATE_MODULE_DIR . '/backup';
+        $directory = gplcart_file_private_module('backup');
         if (!file_exists($directory) && !mkdir($directory, 0775, true)) {
             return false;
         }
@@ -58,9 +58,9 @@ class Module
 
         $time = date('d-m-Y--G-i');
         $destination = gplcart_file_unique("$directory/module-{$data['id']}-$time.zip");
-        $data['path'] = gplcart_file_relative_path($destination);
+        $data['path'] = gplcart_file_relative($destination);
 
-        $success = $this->zip->folder($data['directory'], $destination, $data['id']);
+        $success = $this->zip->directory($data['directory'], $destination, $data['id']);
 
         if ($success) {
             return (bool) $model->add($data);

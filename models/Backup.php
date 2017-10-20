@@ -190,7 +190,7 @@ class Backup extends Model
             return false;
         }
 
-        $file = gplcart_file_absolute_path($backup['path']);
+        $file = gplcart_file_absolute($backup['path']);
         return file_exists($file) && unlink($file);
     }
 
