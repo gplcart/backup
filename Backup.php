@@ -127,7 +127,9 @@ class Backup extends Module
      */
     protected function getModelBackup()
     {
-        return $this->getModel('Backup', 'backup');
+        /* @var $model \gplcart\modules\backup\models\Backup */
+        $model = $this->getModel('Backup', 'backup');
+        return $model;
     }
 
     /**
