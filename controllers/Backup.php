@@ -24,6 +24,12 @@ class Backup extends BackendController
     protected $backup;
 
     /**
+     * Pager limit
+     * @var array
+     */
+    protected $data_limit;
+
+    /**
      * @param ModuleBackupModel $backup
      */
     public function __construct(ModuleBackupModel $backup)
@@ -45,8 +51,7 @@ class Backup extends BackendController
         $this->setBreadcrumbListBackup();
 
         $this->setFilterListBackup();
-        $this->setTotalListBackup();
-        $this->setPagerLimit();
+        $this->setPagerListBackup();
 
         $this->setData('backups', $this->getListBackup());
         $this->setData('handlers', $this->backup->getHandlers());
@@ -135,19 +140,26 @@ class Backup extends BackendController
      */
     protected function getListBackup()
     {
-        $query = $this->query_filter;
-        $query['limit'] = $this->limit;
-        return $this->backup->getList($query);
+        $options = $this->query_filter;
+        $options['limit'] = $this->data_limit;
+        return $this->backup->getList($options);
     }
 
     /**
-     * Sets a total number of backups depending on the filter conditions
+     * Sets pager
+     * @return array
      */
-    protected function setTotalListBackup()
+    protected function setPagerListBackup()
     {
-        $query = $this->query_filter;
-        $query['count'] = true;
-        $this->total = (int) $this->backup->getList($query);
+        $options = $this->query_filter;
+        $options['count'] = true;
+
+        $pager = array(
+            'query' => $this->query_filter,
+            'total' => (int) $this->backup->getList($options)
+        );
+
+        return $this->data_limit = $this->setPager($pager);
     }
 
 }
