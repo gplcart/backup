@@ -202,8 +202,7 @@ class Backup extends Model
      */
     public function backup($handler_id, $data)
     {
-        $handlers = $this->getHandlers();
-        return Handler::call($handlers, $handler_id, 'backup', array($data, $this));
+        return $this->callHandler($handler_id, 'backup', array($data, $this));
     }
 
     /**
@@ -214,8 +213,7 @@ class Backup extends Model
      */
     public function restore($handler_id, $data)
     {
-        $handlers = $this->getHandlers();
-        return Handler::call($handlers, $handler_id, 'restore', array($data, $this));
+        return $this->callHandler($handler_id, 'restore', array($data, $this));
     }
 
     /**
@@ -256,6 +254,23 @@ class Backup extends Model
     {
         $handlers = $this->getHandlers();
         return empty($handlers[$handler_id]) ? array() : $handlers[$handler_id];
+    }
+
+    /**
+     * Cal a handler
+     * @param string $handler_id
+     * @param string $method
+     * @param array $arguments
+     * @return mixed
+     */
+    protected function callHandler($handler_id, $method, array $arguments)
+    {
+        try {
+            $handlers = $this->getHandlers();
+            return Handler::call($handlers, $handler_id, $method, $arguments);
+        } catch (\Exception $ex) {
+            return $ex->getMessage();
+        }
     }
 
     /**
