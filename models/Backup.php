@@ -9,16 +9,29 @@
 
 namespace gplcart\modules\backup\models;
 
-use gplcart\core\Model,
-    gplcart\core\Handler;
+use gplcart\core\Database,
+    gplcart\core\Handler,
+    gplcart\core\Hook;
 use gplcart\core\models\User as UserModel,
     gplcart\core\models\Language as LanguageModel;
 
 /**
  * Manages basic behaviors and data related to Backup model
  */
-class Backup extends Model
+class Backup
 {
+
+    /**
+     * Database class instance
+     * @var \gplcart\core\Database $db
+     */
+    protected $db;
+
+    /**
+     * Hook class instance
+     * @var \gplcart\core\Hook $hook
+     */
+    protected $hook;
 
     /**
      * Language model instance
@@ -33,13 +46,15 @@ class Backup extends Model
     protected $user;
 
     /**
+     * @param Hook $hook
+     * @param Database $db
      * @param UserModel $user
      * @param LanguageModel $language
      */
-    public function __construct(UserModel $user, LanguageModel $language)
+    public function __construct(Hook $hook, Database $db, UserModel $user, LanguageModel $language)
     {
-        parent::__construct();
-
+        $this->db = $db;
+        $this->hook = $hook;
         $this->user = $user;
         $this->language = $language;
     }
