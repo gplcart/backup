@@ -9,22 +9,28 @@
 
 namespace gplcart\modules\backup;
 
-use gplcart\core\Module,
-    gplcart\core\Config;
+use gplcart\core\Config,
+    gplcart\core\Container;
+use gplcart\core\models\Language as LanguageModel;
 
 /**
  * Main class for Backup module
  */
-class Backup extends Module
+class Backup
 {
+
+    /**
+     * Database class instance
+     * @var \gplcart\core\Database $db
+     */
+    protected $db;
 
     /**
      * @param Config $config
      */
     public function __construct(Config $config)
     {
-        parent::__construct($config);
-
+        $this->db = $config->getDb();
         $this->db->addScheme($this->getDbScheme());
     }
 
@@ -38,7 +44,7 @@ class Backup extends Module
             $result = $this->getLanguage()->text('Class ZipArchive does not exist');
         } else {
 
-            $result_db = $this->installDbTable('backup', $this->getDbScheme());
+            $result_db = $this->db->importScheme('backup', $this->getDbScheme());
 
             if ($result_db !== true) {
                 $result = $result_db;
@@ -88,7 +94,7 @@ class Backup extends Module
      */
     public function backup($handler_id, array $data)
     {
-        return $this->getModelBackup()->backup($handler_id, $data);
+        return $this->getModel()->backup($handler_id, $data);
     }
 
     /**
@@ -99,7 +105,7 @@ class Backup extends Module
      */
     public function restore($handler_id, array $data)
     {
-        return $this->getModelBackup()->restore($handler_id, $data);
+        return $this->getModel()->restore($handler_id, $data);
     }
 
     /**
@@ -108,7 +114,7 @@ class Backup extends Module
      */
     public function getHandlers()
     {
-        return $this->getModelBackup()->getHandlers();
+        return $this->getModel()->getHandlers();
     }
 
     /**
@@ -119,18 +125,25 @@ class Backup extends Module
      */
     public function exists($id, $version = null)
     {
-        return $this->getModelBackup()->exists($id, $version);
+        return $this->getModel()->exists($id, $version);
     }
 
     /**
      * Returns backup model
      * @return \gplcart\modules\backup\models\Backup
      */
-    protected function getModelBackup()
+    protected function getModel()
     {
-        /* @var $model \gplcart\modules\backup\models\Backup */
-        $model = $this->getModel('Backup', 'backup');
-        return $model;
+        return Container::get('gplcart\\modules\\backup\\models\\Backup');
+    }
+
+    /**
+     * Language model instance
+     * @return \gplcart\core\models\Language $language
+     */
+    protected function getLanguage()
+    {
+        return Container::get('gplcart\\core\\models\\Language');
     }
 
     /**
