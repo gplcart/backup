@@ -9,11 +9,11 @@
 
 namespace gplcart\modules\backup\models;
 
-use gplcart\core\Database,
-    gplcart\core\Handler,
-    gplcart\core\Hook;
+use gplcart\core\Hook,
+    gplcart\core\Config,
+    gplcart\core\Handler;
 use gplcart\core\models\User as UserModel,
-    gplcart\core\models\Language as LanguageModel;
+    gplcart\core\models\Translation as TranslationModel;
 
 /**
  * Manages basic behaviors and data related to Backup model
@@ -34,10 +34,10 @@ class Backup
     protected $hook;
 
     /**
-     * Language model instance
-     * @var \gplcart\core\models\Language $language
+     * Translation UI model instance
+     * @var \gplcart\core\models\Translation $translation
      */
-    protected $language;
+    protected $translation;
 
     /**
      * User model instance
@@ -47,16 +47,16 @@ class Backup
 
     /**
      * @param Hook $hook
-     * @param Database $db
+     * @param Config $config
      * @param UserModel $user
-     * @param LanguageModel $language
+     * @param TranslationModel $translation
      */
-    public function __construct(Hook $hook, Database $db, UserModel $user, LanguageModel $language)
+    public function __construct(Hook $hook, Config $config, UserModel $user, TranslationModel $translation)
     {
-        $this->db = $db;
         $this->hook = $hook;
         $this->user = $user;
-        $this->language = $language;
+        $this->db = $config->getDb();
+        $this->translation = $translation;
     }
 
     /**
@@ -297,7 +297,7 @@ class Backup
         $handlers = array();
 
         $handlers['module'] = array(
-            'name' => $this->language->text('Module'),
+            'name' => $this->translation->text('Module'),
             'handlers' => array(
                 'backup' => array('gplcart\\modules\\backup\\handlers\\Module', 'backup')
         ));

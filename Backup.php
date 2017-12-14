@@ -41,7 +41,7 @@ class Backup
     public function hookModuleInstallBefore(&$result)
     {
         if (!class_exists('ZipArchive')) {
-            $result = $this->getLanguage()->text('Class ZipArchive does not exist');
+            $result = $this->getTranslationModel()->text('Class ZipArchive does not exist');
         } else {
 
             $result_db = $this->db->importScheme('backup', $this->getDbScheme());
@@ -138,12 +138,12 @@ class Backup
     }
 
     /**
-     * Language model instance
-     * @return \gplcart\core\models\Language $language
+     * Translation UI model instance
+     * @return \gplcart\core\models\Translation
      */
-    protected function getLanguage()
+    protected function getTranslationModel()
     {
-        return Container::get('gplcart\\core\\models\\Language');
+        return Container::get('gplcart\\core\\models\\Translation');
     }
 
     /**

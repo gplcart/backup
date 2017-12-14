@@ -10,7 +10,7 @@
 namespace gplcart\modules\backup\handlers;
 
 use gplcart\core\helpers\Zip as ZipHelper;
-use gplcart\core\models\Language as LanguageModel;
+use gplcart\core\models\Translation as TranslationModel;
 
 /**
  * Provides methods to backup modules
@@ -19,10 +19,10 @@ class Module
 {
 
     /**
-     * Language model instance
-     * @var \gplcart\core\models\Language $language
+     * Translation UI model instance
+     * @var \gplcart\core\models\Translation $translation
      */
-    protected $language;
+    protected $translation;
 
     /**
      * Zip helper class instance
@@ -31,13 +31,13 @@ class Module
     protected $zip;
 
     /**
-     * @param LanguageModel $language
+     * @param TranslationModel $translation
      * @param ZipHelper $zip
      */
-    public function __construct(LanguageModel $language, ZipHelper $zip)
+    public function __construct(TranslationModel $translation, ZipHelper $zip)
     {
         $this->zip = $zip;
-        $this->language = $language;
+        $this->translation = $translation;
     }
 
     /**
@@ -54,7 +54,7 @@ class Module
         }
 
         $data['type'] = 'module';
-        $data['name'] = $this->language->text('Module @name', array('@name' => $data['name']));
+        $data['name'] = $this->translation->text('Module @name', array('@name' => $data['name']));
 
         $time = date('d-m-Y--G-i');
         $destination = gplcart_file_unique("$directory/module-{$data['id']}-$time.zip");
