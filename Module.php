@@ -11,12 +11,11 @@ namespace gplcart\modules\backup;
 
 use gplcart\core\Config,
     gplcart\core\Container;
-use gplcart\core\models\Language as LanguageModel;
 
 /**
  * Main class for Backup module
  */
-class Backup
+class Module
 {
 
     /**
