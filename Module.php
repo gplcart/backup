@@ -9,6 +9,7 @@
 
 namespace gplcart\modules\backup;
 
+use Exception;
 use gplcart\core\Config,
     gplcart\core\Container;
 
@@ -43,10 +44,10 @@ class Module
             $result = $this->getTranslationModel()->text('Class ZipArchive does not exist');
         } else {
 
-            $result_db = $this->db->importScheme('backup', $this->getDbScheme());
-
-            if ($result_db !== true) {
-                $result = $result_db;
+            try {
+                $this->db->importScheme('backup', $this->getDbScheme());
+            } catch (Exception $ex) {
+                $result = $ex->getMessage();
             }
         }
     }
