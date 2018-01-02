@@ -16,7 +16,7 @@ use gplcart\core\Config,
 /**
  * Main class for Backup module
  */
-class Module
+class Main
 {
 
     /**
