@@ -10,8 +10,8 @@
 namespace gplcart\modules\backup;
 
 use Exception;
-use gplcart\core\Config,
-    gplcart\core\Container;
+use gplcart\core\Config;
+use gplcart\core\Container;
 
 /**
  * Main class for Backup module
@@ -66,9 +66,9 @@ class Main
      */
     public function hookUserRolePermissions(array &$permissions)
     {
-        $permissions['backup'] = /* @text */'Backup: access';
-        $permissions['backup_delete'] = /* @text */'Backup: delete';
-        $permissions['backup_download'] = /* @text */'Backup: download';
+        $permissions['backup'] = 'Backup: access'; // @text
+        $permissions['backup_delete'] = 'Backup: delete'; // @text
+        $permissions['backup_download'] = 'Backup: download'; // @text
     }
 
     /**
@@ -79,7 +79,9 @@ class Main
     {
         $routes['admin/report/backup'] = array(
             'access' => 'backup',
-            'menu' => array('admin' => /* @text */'Backups'),
+            'menu' => array(
+                'admin' => 'Backups' // @text
+            ),
             'handlers' => array(
                 'controller' => array('gplcart\\modules\\backup\\controllers\\Backup', 'listBackup')
             )
@@ -134,7 +136,9 @@ class Main
      */
     protected function getModel()
     {
-        return Container::get('gplcart\\modules\\backup\\models\\Backup');
+        /** @var \gplcart\modules\backup\models\Backup $instance */
+        $instance = Container::get('gplcart\\modules\\backup\\models\\Backup');
+        return $instance;
     }
 
     /**
@@ -143,7 +147,9 @@ class Main
      */
     protected function getTranslationModel()
     {
-        return Container::get('gplcart\\core\\models\\Translation');
+        /** @var \gplcart\core\models\Translation $instance */
+        $instance = Container::get('gplcart\\core\\models\\Translation');
+        return $instance;
     }
 
     /**
