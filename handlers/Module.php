@@ -9,14 +9,19 @@
 
 namespace gplcart\modules\backup\handlers;
 
-use gplcart\core\helpers\Zip as ZipHelper;
-use gplcart\core\models\Translation as TranslationModel;
+use gplcart\core\helpers\Zip;
+use gplcart\core\models\Translation;
 
 /**
  * Provides methods to backup modules
  */
 class Module
 {
+    /**
+     * Zip helper class instance
+     * @var \gplcart\core\helpers\Zip $zip
+     */
+    protected $zip;
 
     /**
      * Translation UI model instance
@@ -25,16 +30,11 @@ class Module
     protected $translation;
 
     /**
-     * Zip helper class instance
-     * @var \gplcart\core\helpers\Zip $zip
+     * Module constructor.
+     * @param Translation $translation
+     * @param Zip $zip
      */
-    protected $zip;
-
-    /**
-     * @param TranslationModel $translation
-     * @param ZipHelper $zip
-     */
-    public function __construct(TranslationModel $translation, ZipHelper $zip)
+    public function __construct(Translation $translation, Zip $zip)
     {
         $this->zip = $zip;
         $this->translation = $translation;
@@ -49,6 +49,7 @@ class Module
     public function backup(array $data, $model)
     {
         $directory = gplcart_file_private_module('backup');
+
         if (!file_exists($directory) && !mkdir($directory, 0775, true)) {
             return false;
         }

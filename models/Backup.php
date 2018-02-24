@@ -9,11 +9,12 @@
 
 namespace gplcart\modules\backup\models;
 
-use gplcart\core\Hook,
-    gplcart\core\Config,
-    gplcart\core\Handler;
-use gplcart\core\models\User as UserModel,
-    gplcart\core\models\Translation as TranslationModel;
+use Exception;
+use gplcart\core\Config;
+use gplcart\core\Handler;
+use gplcart\core\Hook;
+use gplcart\core\models\Translation;
+use gplcart\core\models\User;
 
 /**
  * Manages basic behaviors and data related to Backup model
@@ -46,12 +47,13 @@ class Backup
     protected $user;
 
     /**
+     * Backup constructor.
      * @param Hook $hook
      * @param Config $config
-     * @param UserModel $user
-     * @param TranslationModel $translation
+     * @param User $user
+     * @param Translation $translation
      */
-    public function __construct(Hook $hook, Config $config, UserModel $user, TranslationModel $translation)
+    public function __construct(Hook $hook, Config $config, User $user, Translation $translation)
     {
         $this->hook = $hook;
         $this->user = $user;
@@ -72,9 +74,9 @@ class Backup
             $sql = 'SELECT COUNT(b.backup_id)';
         }
 
-        $sql .= ' FROM backup b'
-                . ' LEFT JOIN user u ON(b.user_id = u.user_id)'
-                . ' WHERE b.backup_id > 0';
+        $sql .= ' FROM backup b
+                  LEFT JOIN user u ON(b.user_id = u.user_id)
+                  WHERE b.backup_id > 0';
 
         $where = array();
 
@@ -102,8 +104,10 @@ class Backup
         $allowed_sort = array('name', 'user_id', 'version',
             'id', 'backup_id', 'type', 'created');
 
-        if (isset($data['sort']) && in_array($data['sort'], $allowed_sort)//
-                && isset($data['order']) && in_array($data['order'], $allowed_order)
+        if (isset($data['sort'])
+            && in_array($data['sort'], $allowed_sort)
+            && isset($data['order'])
+            && in_array($data['order'], $allowed_order)
         ) {
             $sql .= " ORDER BY b.{$data['sort']} {$data['order']}";
         } else {
@@ -283,7 +287,7 @@ class Backup
         try {
             $handlers = $this->getHandlers();
             return Handler::call($handlers, $handler_id, $method, $arguments);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             return $ex->getMessage();
         }
     }
@@ -300,7 +304,7 @@ class Backup
             'name' => $this->translation->text('Module'),
             'handlers' => array(
                 'backup' => array('gplcart\\modules\\backup\\handlers\\Module', 'backup')
-        ));
+            ));
 
         return $handlers;
     }

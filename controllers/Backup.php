@@ -9,13 +9,13 @@
 
 namespace gplcart\modules\backup\controllers;
 
-use gplcart\modules\backup\models\Backup as ModuleBackupModel;
-use gplcart\core\controllers\backend\Controller as BackendController;
+use gplcart\core\controllers\backend\Controller;
+use gplcart\modules\backup\models\Backup as BackupModel;
 
 /**
  * Handles incoming requests and outputs data related to Backup module
  */
-class Backup extends BackendController
+class Backup extends Controller
 {
 
     /**
@@ -30,9 +30,10 @@ class Backup extends BackendController
     protected $data_limit;
 
     /**
-     * @param ModuleBackupModel $backup
+     * Backup constructor.
+     * @param BackupModel $backup
      */
-    public function __construct(ModuleBackupModel $backup)
+    public function __construct(BackupModel $backup)
     {
         parent::__construct();
 
@@ -46,10 +47,8 @@ class Backup extends BackendController
     {
         $this->downloadListBackup();
         $this->actionListBackup();
-
         $this->setTitleListBackup();
         $this->setBreadcrumbListBackup();
-
         $this->setFilterListBackup();
         $this->setPagerListBackup();
 
@@ -64,9 +63,7 @@ class Backup extends BackendController
      */
     protected function setFilterListBackup()
     {
-        $allowed = array('created', 'name', 'user_id', 'type',
-            'version', 'id', 'backup_id');
-
+        $allowed = array('created', 'name', 'user_id', 'type', 'version', 'id', 'backup_id');
         $this->setFilter($allowed);
     }
 
@@ -98,6 +95,7 @@ class Backup extends BackendController
         list($selected, $action) = $this->getPostedAction();
 
         $deleted = 0;
+
         foreach ($selected as $id) {
             if ($action === 'delete' && $this->access('backup_delete')) {
                 $deleted += (int) $this->backup->delete($id);
